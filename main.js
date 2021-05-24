@@ -57,7 +57,7 @@ class Field {
         }
     }
 
-    checkProgress() {
+    playGame() {
         try {
             if(this._field[this._currentPosition[0]][this._currentPosition[1]] === 'O') {
                 console.log('You fell in a hole! You lose! :(');
@@ -69,7 +69,7 @@ class Field {
                 this.print();
                 this.listen();
                 console.clear();
-                this.checkProgress();
+                this.playGame();
             }
         } catch (TypeError) {
             console.log('Out of bounds; you lose! :(');
@@ -77,13 +77,43 @@ class Field {
         }
 
     }
+
+    static generateHatLocation(height, width) {
+        const hatLocation = [Math.floor(Math.random()*height), Math.floor(Math.random()*width)];
+        if(hatLocation === [0, 0]) {
+            generateHatLocation();
+        } else {
+            return hatLocation;
+        }
+    }
+
+    static generateField(height, width, percentChance) {
+        const hatLocation = Field.generateHatLocation(height, width);
+        let newField = [];
+        for(let i=0; i<height; i++) {
+            newField.push([]);
+            for(let j=0; j<width; j++) {
+                if(i === 0 && j === 0) {
+                    newField[0][0] = '*';
+                } else if(i === hatLocation[0] && j === hatLocation[1]) {
+                    newField[i][j] = '^';
+                } else {
+                    const chance = Math.random();
+                    if(chance < percentChance) {
+                        newField[i][j] = 'O';
+                    } else {
+                        newField[i][j] = '░';
+                    }
+                }
+            }
+        }
+        return newField;
+    }
 }
 
-const field = new Field([
-    ['*', '░', '░'],
-    ['░', 'O', '░'],
-    ['░', '^', '░'],
-  ]);
+const height = Math.floor(Math.random()*12+3);
+const width = Math.floor(Math.random()*12+3);
+const percentChance = Math.random()*(.4-.1)+.1;
 
-console.clear();
-field.checkProgress();
+const field = new Field(Field.generateField(height, width, percentChance));
+field.playGame();
