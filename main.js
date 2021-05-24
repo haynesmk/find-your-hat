@@ -65,7 +65,6 @@ class Field {
                 console.log('You found your hat! You win!! :D');
             } else {
                 this._field[this._currentPosition[0]][this._currentPosition[1]] = '*';
-                console.log(this._currentPosition);
                 this.print();
                 this.listen();
                 console.clear();
@@ -110,6 +109,8 @@ class Field {
         return newField;
     }
 }
+
+console.clear();
 
 const height = Math.floor(Math.random()*12+3);
 const width = Math.floor(Math.random()*12+3);
